@@ -217,7 +217,4 @@ Your `csemutex_lock()` must loop until the lock can be successfully
 acquired, and it must call `sched_yield()` in each iteration of the loop
 before attempting the lock again.
 
-Submission
---
 
-Submit only the file `csemutex.c` to Autograder.
