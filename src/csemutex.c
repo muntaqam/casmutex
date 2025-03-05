@@ -30,27 +30,15 @@ void csemutex_init(csemutex_t *mutex) {
     __atomic_store_n(mutex, 0, __ATOMIC_RELEASE);
 }
 
-/* The given version of this function DOES NOT WORK! */
 void csemutex_lock(csemutex_t *mutex) {
-    *mutex = 1;
-
-    /* The following provides the memory barrier that ensures that all
-     * shared locations OTHER than the mutex itself are visible to this
-     * thread.  You should not remove or reorder this line, it must be
-     * the last statement in this function! */
+    while (!cse_cas(mutex, 0, 1))
+    {
+        sched_yield();
+    }
     __atomic_thread_fence(__ATOMIC_ACQUIRE);
 }
 
-/* The given version of this function will work in most circumstances,
- * but you should replace the simple assignment with an atomic
- * compare-and-swap operation. */
 void csemutex_unlock(csemutex_t *mutex) {
-    *mutex = 0;
-
-    /* The following provides the memory barrier that ensures that all
-     * changes made by this thread while the lock was held are visible
-     * to other threads before they complete acquisition of this lock.
-     * You should not remove or reorder this line, it must be the last
-     * statement in this function! */
+    cse_cas(mutex, 1, 0);
     __atomic_thread_fence(__ATOMIC_RELEASE);
 }
