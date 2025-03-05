@@ -1,10 +1,6 @@
 Implementing Mutexes with Compare-and-Swap
 ==
 
-In this recitation, you will implement mutexes using atomic
-compare-and-swap operations provided by the compiler.  Your mutex will
-use an integer as its internal state.
-
 Getting started
 --
 
@@ -202,19 +198,6 @@ and wait for the mutex to be unlocked if it is already locked.  You can
 perform this blocking with a loop that continually checks the mutex to
 see if it is unlocked, and changes it to be locked only if it is.
 
-Requirements
---
 
-You must implement the two functions `csemutex_lock()` and
-`csemutex_unlock()` in `csemutex.c`.  The given implementations are
-_not correct_, although the implementation of `csemutex_unlock()`, in
-particular, may work anyway.
-
-The function `csemutex_init()` is given to you, and you may assume that
-it is correct.
-
-Your `csemutex_lock()` must loop until the lock can be successfully
-acquired, and it must call `sched_yield()` in each iteration of the loop
-before attempting the lock again.
 
 
